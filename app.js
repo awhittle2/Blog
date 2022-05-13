@@ -48,6 +48,6 @@ app.post("/compose", function(req, res) { // Function to allow posting on the co
     res.redirect("/"); // Redirects the user to the home route
 })
 
-app.listen(3000, function(req, res) { // Tells what port the server will be running on
+app.listen(process.env.PORT || 3000, function(req, res) { // Tells what port the server will be running on
     console.log("Server started on port 3000"); // Print that the server was successfully starter
 });
