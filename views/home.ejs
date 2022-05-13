@@ -1,8 +1,10 @@
-<%- include("header"); -%>
+<%-include("header");-%>
 <h1>Home</h1>
-<p><%= homeStartingContent%></p>
+<p><%=homeStartingContent%></p>
+<hr>
 <%posts.forEach(function(post) {%>
     <h2><%=post.title%></h2>
     <p><%=post.body%></p>
+    <hr>
 <%});%>
-<%- include("footer"); -%>
+<%-include("footer");-%>

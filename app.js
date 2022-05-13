@@ -33,17 +33,15 @@ app.get("/compose", function(req, res) {
 });
 
 app.get("/posts/:postName", function(req, res) {
-    let postRequest = req.params.postName;
     posts.forEach(function(post) {
-        let postTitle = post.title;
-        if(postRequest === postTitle) {
-            console.log("Match found!");
-        } else {
-            console.log("Not a match!");
-
+        if(_.lowerCase(req.params.postName) === _.lowerCase(post.title)) {
+            let title = post.title;
+            let postPost = post.post
+            res.render("post", {title: title, post: postPost});
+            console.log("Rendered page");
         }
-    })
-})
+    });
+});
 
 app.post("/compose", function(req, res) {
     const post = {title: req.body.title, body: req.body.post};
