@@ -1,12 +1,12 @@
-<%-include("header");-%>
-<h1>Compose</h1>
-<form action="/compose" method="post">
-    <div class="form-group">
-        <label>Title</label>
-        <input class="form-control" type="text" name="title">
-        <label>Post</label>
-        <textarea class="form-control" name="post" rows="5" cols="30"></textarea>
+<%-include("header");-%> <!-- Includes the header-->
+<h1>Compose</h1> <!-- Page Title-->
+<form action="/compose" method="post"> <!-- Form to collect user input-->
+    <div class="form-group"> <!-- Div to format all the items-->
+        <label>Title</label> <!-- Label for first text box-->
+        <input class="form-control" type="text" name="title"> <!-- 1 line text box-->
+        <label>Post</label> <!-- Label for second text box-->
+        <textarea class="form-control" name="post" rows="5" cols="30"></textarea> <!-- Multi line text box-->
     </div>
-    <button type="submit" class="btn btn-primary" name="button">Publish</button>
+    <button type="submit" class="btn btn-primary" name="button">Publish</button> <!-- Button to submit user input-->
 </form>
-<%-include("footer");-%>
+<%-include("footer");-%> <!-- Includes the footer-->
