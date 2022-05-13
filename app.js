@@ -14,7 +14,8 @@ const homeStartingContent = "Lorem ipsum dolor sit amet, consectetur adipiscing 
 const aboutContent = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.";
 const contactContent = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.";
 
-const posts = [];
+const posts = [{title: "Day 1", body: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Sit amet porttitor eget dolor morbi non arcu. Purus gravida quis blandit turpis cursus in hac habitasse. Nunc pulvinar sapien et ligula ullamcorper malesuada proin libero. Bibendum ut tristique et egestas quis ipsum. Magna etiam tempor orci eu lobortis elementum nibh. Ullamcorper velit sed ullamcorper morbi tincidunt ornare massa eget. Ac tortor dignissim convallis aenean et tortor at risus. Mattis rhoncus urna neque viverra justo nec. Velit euismod in pellentesque massa placerat duis ultricies lacus sed. In metus vulputate eu scelerisque felis. Ut sem viverra aliquet eget sit amet. Nulla aliquet porttitor lacus luctus accumsan tortor."}]
+
 
 app.get("/", function(req, res) {
     res.render("home", {homeStartingContent: homeStartingContent, posts: posts});

@@ -4,7 +4,7 @@
 <hr>
 <%posts.forEach(function(post) {%>
     <h2><%=post.title%></h2>
-    <p><%=post.body.substring(0, 100) + "..."%>
+    <p><%=post.body.substring(0, 170) + "..."%>
     <a href="/posts/<%=post.title%>">Read More</a>
     </p>
     <hr>
