@@ -35,10 +35,10 @@ app.get("/compose", function(req, res) {
 app.get("/posts/:postName", function(req, res) {
     posts.forEach(function(post) {
         if(_.lowerCase(req.params.postName) === _.lowerCase(post.title)) {
-            let title = post.title;
-            let postPost = post.post
-            res.render("post", {title: title, post: postPost});
-            console.log("Rendered page");
+            console.log("Match Found!");
+            const title = post.title;
+            const body = post.body;
+            res.render("post", {title: title, body: body});
         }
     });
 });
