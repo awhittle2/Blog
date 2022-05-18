@@ -1,53 +1,84 @@
-const express = require("express"); // Allows for the use of express
-const bodyParser = require("body-parser"); // Allows for the use of body parser which allows us to read user input from a HTML form
-const ejs = require("ejs"); // Allows for the use of ejs which allows us to create layouts and templates
-const _ = require("lodash"); // Allows for the use of lodash which allows us to format the dynamic urls
+const express = require("express");
+const bodyParser = require("body-parser");
+const ejs = require("ejs");
+const mongoose = require('mongoose');
 
-const app = express(); // Required for express
-app.set("view engine", 'ejs'); // Required for ejs
-app.use(bodyParser.urlencoded({extended: true})); // Required for body parser
-app.use(express.static("public")); // Allows for the use of static files such as our css
+const homeStartingContent = "Lacus vel facilisis volutpat est velit egestas dui id ornare. Semper auctor neque vitae tempus quam. Sit amet cursus sit amet dictum sit amet justo. Viverra tellus in hac habitasse. Imperdiet proin fermentum leo vel orci porta. Donec ultrices tincidunt arcu non sodales neque sodales ut. Mattis molestie a iaculis at erat pellentesque adipiscing. Magnis dis parturient montes nascetur ridiculus mus mauris vitae ultricies. Adipiscing elit ut aliquam purus sit amet luctus venenatis lectus. Ultrices vitae auctor eu augue ut lectus arcu bibendum at. Odio euismod lacinia at quis risus sed vulputate odio ut. Cursus mattis molestie a iaculis at erat pellentesque adipiscing.";
+const aboutContent = "Hac habitasse platea dictumst vestibulum rhoncus est pellentesque. Dictumst vestibulum rhoncus est pellentesque elit ullamcorper. Non diam phasellus vestibulum lorem sed. Platea dictumst quisque sagittis purus sit. Egestas sed sed risus pretium quam vulputate dignissim suspendisse. Mauris in aliquam sem fringilla. Semper risus in hendrerit gravida rutrum quisque non tellus orci. Amet massa vitae tortor condimentum lacinia quis vel eros. Enim ut tellus elementum sagittis vitae. Mauris ultrices eros in cursus turpis massa tincidunt dui.";
+const contactContent = "Scelerisque eleifend donec pretium vulputate sapien. Rhoncus urna neque viverra justo nec ultrices. Arcu dui vivamus arcu felis bibendum. Consectetur adipiscing elit duis tristique. Risus viverra adipiscing at in tellus integer feugiat. Sapien nec sagittis aliquam malesuada bibendum arcu vitae. Consequat interdum varius sit amet mattis. Iaculis nunc sed augue lacus. Interdum posuere lorem ipsum dolor sit amet consectetur adipiscing elit. Pulvinar elementum integer enim neque. Ultrices gravida dictum fusce ut placerat orci nulla. Mauris in aliquam sem fringilla ut morbi tincidunt. Tortor posuere ac ut consequat semper viverra nam libero.";
 
-const homeStartingContent = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."; // Body of the home route
-const aboutContent = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."; // Body of the about route
-const contactContent = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."; // Body of the contact route
+const app = express();
 
-const posts = [{title: "Day 1", body: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Sit amet porttitor eget dolor morbi non arcu. Purus gravida quis blandit turpis cursus in hac habitasse. Nunc pulvinar sapien et ligula ullamcorper malesuada proin libero. Bibendum ut tristique et egestas quis ipsum. Magna etiam tempor orci eu lobortis elementum nibh. Ullamcorper velit sed ullamcorper morbi tincidunt ornare massa eget. Ac tortor dignissim convallis aenean et tortor at risus. Mattis rhoncus urna neque viverra justo nec. Velit euismod in pellentesque massa placerat duis ultricies lacus sed. In metus vulputate eu scelerisque felis. Ut sem viverra aliquet eget sit amet. Nulla aliquet porttitor lacus luctus accumsan tortor."}] // Creates 1 blog post
+app.set('view engine', 'ejs');
 
+app.use(bodyParser.urlencoded({extended: true}));
+app.use(express.static("public"));
 
-app.get("/", function(req, res) { // Creates a root route
-    res.render("home", {homeStartingContent: homeStartingContent, posts: posts}); // Renders the template made with ejs to this route
+mongoose.connect("mongodb://localhost:27017/blogDB", {useNewUrlParser: true});
+
+const postSchema = {
+  title: {
+      type: String,
+      required: true
+  },
+  content: {
+      type: String,
+      required: true
+  }
+};
+
+const Post = mongoose.model("Post", postSchema);
+
+app.get("/", function(req, res){
+
+  Post.find({}, function(err, posts){
+    res.render("home", {
+      homeStartingContent: homeStartingContent,
+      posts: posts
+      });
+  });
 });
 
-app.get("/about", function(req, res) { // Creates an about route
-    res.render("about", {aboutContent: aboutContent}); // Renders the template made with ejs to this route
+app.get("/compose", function(req, res){
+  res.render("compose");
 });
 
-app.get("/contact", function(req, res) { // Creates a contact route
-    res.render("contact", {contactContent: contactContent}); // Renders the template made with ejs to this route
+app.post("/compose", function(req, res){
+  const post = new Post({
+    title: req.body.postTitle,
+    content: req.body.postBody
+  });
+
+
+  post.save(function(err){
+    if (!err){
+        res.redirect("/");
+    }
+  });
 });
 
-app.get("/compose", function(req, res) { // Creates a compose route
-    res.render("compose") // Renders the template made with ejs to this route
-});
+app.get("/posts/:postId", function(req, res){
 
-app.get("/posts/:postName", function(req, res) { // Dynamically creates a route of :postName
-    posts.forEach(function(post) { // Goes through each item in the posts array
-        if(_.lowerCase(req.params.postName) === _.lowerCase(post.title)) { // If the title of the post matches post name
-            console.log("Match Found!"); // Print match found
-            const title = post.title; // Create a const to hold the title of the post
-            const body = post.body; // Create a const to hold the body of the post
-            res.render("post", {title: title, body: body}); // Renders the template made with ejs to this route
-        }
+const requestedPostId = req.params.postId;
+
+  Post.findOne({_id: requestedPostId}, function(err, post){
+    res.render("post", {
+      title: post.title,
+      content: post.content
     });
+  });
+
 });
 
-app.post("/compose", function(req, res) { // Function to allow posting on the compose route
-    const post = {title: req.body.title, body: req.body.post}; // Creates a new object with the information that the user typed in
-    posts.push(post); // Pushes the object to the posts array
-    res.redirect("/"); // Redirects the user to the home route
-})
+app.get("/about", function(req, res){
+  res.render("about", {aboutContent: aboutContent});
+});
 
-app.listen(process.env.PORT || 3000, function(req, res) { // Tells what port the server will be running on
-    console.log("Server started on port 3000"); // Print that the server was successfully starter
+app.get("/contact", function(req, res){
+  res.render("contact", {contactContent: contactContent});
+});
+
+
+app.listen(3000, function() {
+  console.log("Server started on port 3000");
 });
